@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Navigation from "./Navigation";
@@ -10,64 +10,51 @@ import HomePage from "./Home";
 import AccountPage from "./Account";
 
 import * as routes from "../constants/routes";
-import { firebase } from "../firebase";
 
-class App extends Component {
-    state = {
-        authUser: null
-    };
+import withAuthentication from "./withAuthentication";
 
-    componentDidMount() {
-        // Checks if user has authenticated and updates state accordingly
-        firebase.auth.onAuthStateChanged(authUser => {
-            authUser
-                ? this.setState({ authUser })
-                : this.setState({ authUser: null });
-        });
-    }
+const App = () => {
+    return (
+        <Router>
+            <div>
+                <Navigation />
 
-    render() {
-        return (
-            <Router>
-                <div>
-                    <Navigation authUser={this.state.authUser} />
+                <hr />
 
-                    <hr />
+                <Route
+                    exact
+                    path={routes.LANDING}
+                    component={() => <LandingPage />}
+                />
+                <Route
+                    exact
+                    path={routes.SIGN_UP}
+                    component={() => <SignUpPage />}
+                />
+                <Route
+                    exact
+                    path={routes.SIGN_IN}
+                    component={() => <SignInPage />}
+                />
+                <Route
+                    exact
+                    path={routes.PASSWORD_FORGET}
+                    component={() => <PasswordForgetPage />}
+                />
+                <Route
+                    exact
+                    path={routes.HOME}
+                    component={() => <HomePage />}
+                />
+                <Route
+                    exact
+                    path={routes.ACCOUNT}
+                    component={() => <AccountPage />}
+                />
+            </div>
+        </Router>
+    );
+};
 
-                    <Route
-                        exact
-                        path={routes.LANDING}
-                        component={() => <LandingPage />}
-                    />
-                    <Route
-                        exact
-                        path={routes.SIGN_UP}
-                        component={() => <SignUpPage />}
-                    />
-                    <Route
-                        exact
-                        path={routes.SIGN_IN}
-                        component={() => <SignInPage />}
-                    />
-                    <Route
-                        exact
-                        path={routes.PASSWORD_FORGET}
-                        component={() => <PasswordForgetPage />}
-                    />
-                    <Route
-                        exact
-                        path={routes.HOME}
-                        component={() => <HomePage />}
-                    />
-                    <Route
-                        exact
-                        path={routes.ACCOUNT}
-                        component={() => <AccountPage />}
-                    />
-                </div>
-            </Router>
-        );
-    }
-}
-
-export default App;
+// Higher order component wrapped App component
+export default withAuthentication(App);
