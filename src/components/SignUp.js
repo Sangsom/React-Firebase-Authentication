@@ -99,11 +99,11 @@ class SignUpForm extends Component {
     }
 }
 
-const SignUpLink = () => {
+const SignUpLink = () => (
     <p>
         Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
-    </p>;
-};
+    </p>
+);
 
 export default withRouter(SignUpPage);
 
